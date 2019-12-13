@@ -25,14 +25,7 @@ WORKDIR $HOME
 
 
 
-# Layer cleanup script
-COPY clean-layer.sh	/usr/bin/clean-layer.sh
-COPY fix-permissions.sh	/usr/bin/fix-permissions.sh
-
-
-
-RUN \
-	
+RUN \	
 	# --- 0 Update Your Ubuntu Installation
 	echo "deb http://de.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse">>/etc/apt/sources.list && \
 	echo "deb http://security.ubuntu.com/ubuntu bionic-security multiverse">>/etc/apt/sources.list && \
@@ -89,7 +82,7 @@ RUN \
 	apt-get -y install ufw
 	
 ADD awstats /etc/cron.d/
-ADD autoinstall.ini /root/
+
 ADD pure-ftpd-common /etc/default/
 ADD supervisord.conf /etc/supervisord/supervisord.conf
 
@@ -106,14 +99,32 @@ RUN \
 	ls
 	#supervisorctl reload
 	
-	
-	# Cleanup
-	#chmod a+rwx /usr/bin/clean-layer.sh && \ 
-	#chmod a+rwx /usr/bin/fix-permissions.sh
+
+RUN \
+	cd /root &&\
+	wget -O ispconfig.tar.gz https://git.ispconfig.org/ispconfig/ispconfig3/repository/archive.tar.gz?ref=stable-3.1 &&\
+	tar xfz ispconfig.tar.gz &&\
+	mv ispconfig3* ispconfig3_install &&\
+
+ADD start.sh /
+ADD autoinstall.ini /root/ispconfig3_install/install/
+RUN \
+	mkdir -p /var/run/sshd /var/log/supervisor /var/run/supervisor &&\
+	chmod 755 /start.sh
 
 
-
+# CLEANING
+RUN \
+	apt-get autoremove -y &&\
+	apt-get clean &&\
+	rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/* &&\
+	# Remove apt lists
+	rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
 
 
 
 EXPOSE 20/tcp 21/tcp 22/tcp 80/tcp 443/tcp 8080/tcp
+
+#VOLUME ["/var/www/","/var/mail/","/var/backup/","/var/lib/mysql","/var/log/"]
+
+CMD ["/bin/bash", "/start.sh"]
