@@ -26,7 +26,7 @@ services:
        - db
      build:
       context: web
-      dockerfile: web/Dockerfile
+      dockerfile: Dockerfile
      ports:
        - "8020:20"
        - "8021:21"
