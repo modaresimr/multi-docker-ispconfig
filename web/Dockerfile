@@ -3,8 +3,7 @@ FROM ubuntu:18.04
 
 MAINTAINER Ali Modaresi <modaresi.mr@gmail.com> version: 1.0
 
-# Let the container know that there is no tty
-ENV 
+
 
 
 USER root
