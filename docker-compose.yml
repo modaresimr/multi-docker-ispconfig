@@ -1,4 +1,4 @@
-version: '3.3'
+version: '2'
 
 services:
    db:
@@ -7,10 +7,7 @@ services:
        - db_data:/var/lib/mysql
      restart: always
      environment:
-       MYSQL_ROOT_PASSWORD: somewordpress
-       MYSQL_DATABASE: wordpress
-       MYSQL_USER: wordpress
-       MYSQL_PASSWORD: wordpress
+       MYSQL_ROOT_PASSWORD: 123456!@#$%^
 
     #dns:
     # restart: always
@@ -27,7 +24,9 @@ services:
    ispconfig:
      depends_on:
        - db
-     image: wordpress:latest
+     build:
+      context: web
+      dockerfile: web/Dockerfile
      ports:
        - "8020:20"
        - "8021:21"
