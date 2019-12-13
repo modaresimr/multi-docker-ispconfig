@@ -70,9 +70,9 @@ RUN \
 	# https://www.howtoforge.com/tutorial/perfect-server-ubuntu-18-04-nginx-bind-dovecot-and-ispconfig-3/
 	
 	# --- STEP 4
-	service apparmor stop &&\
-	update-rc.d -f apparmor remove &&\
-	apt-get remove apparmor apparmor-utils &&\
+	#service apparmor stop &&\
+	#update-rc.d -f apparmor remove &&\
+	#apt-get remove apparmor apparmor-utils &&\
 	
 	# --- MYSQL CLIENT
 	apt-get -y install mysql-client &&\
