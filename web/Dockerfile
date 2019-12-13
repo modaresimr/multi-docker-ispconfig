@@ -106,7 +106,7 @@ RUN \
 	tar xfz ispconfig.tar.gz &&\
 	mv ispconfig3* ispconfig3_install &&\
 
-ADD start.sh /
+ADD ./start.sh /start.sh
 ADD autoinstall.ini /root/ispconfig3_install/install/
 RUN \
 	mkdir -p /var/run/sshd /var/log/supervisor /var/run/supervisor &&\
