@@ -26,8 +26,8 @@ WORKDIR $HOME
 
 
 # Layer cleanup script
-COPY ../scripts/clean-layer.sh	/usr/bin/clean-layer.sh
-COPY ../scripts/fix-permissions.sh	/usr/bin/fix-permissions.sh
+COPY clean-layer.sh	/usr/bin/clean-layer.sh
+COPY fix-permissions.sh	/usr/bin/fix-permissions.sh
 ADD awstats /etc/cron.d/
 ADD autoinstall.ini /root/
 ADD pure-ftpd-common /etc/default/
