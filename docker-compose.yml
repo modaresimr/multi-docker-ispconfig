@@ -1,0 +1,46 @@
+version: '3.3'
+
+services:
+   db:
+     image: mysql/mysql-server:8.0
+     volumes:
+       - db_data:/var/lib/mysql
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: somewordpress
+       MYSQL_DATABASE: wordpress
+       MYSQL_USER: wordpress
+       MYSQL_PASSWORD: wordpress
+
+    #dns:
+    # restart: always
+    # image: sameersbn/bind:9.11.3-20190706
+    # environment:
+    #    ISPCONFIG_HOST: ispconfig
+    # ports:
+    #  - "53:53/udp"
+    #  - "53:53/tcp"
+    #  - "10000:10000/tcp"
+    #volumes:
+    #- /docker-vol/bind:/data
+    
+   ispconfig:
+     depends_on:
+       - db
+     image: wordpress:latest
+     ports:
+       - "8020:20"
+       - "8021:21"
+       - "8022:22"
+       - "80:80"
+       - "443:443"
+       - "8080:8080"
+     restart: always
+     environment:
+       MYSQL_HOST: db
+       MYSQL_PORT: 3306
+       MYSQL_PASSWORD: 123456!@#$%^
+       HOSTNAME: robocup.org
+
+volumes:
+    db_data: {}
