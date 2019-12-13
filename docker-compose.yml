@@ -38,7 +38,7 @@ services:
      environment:
        MYSQL_HOST: db
        MYSQL_PORT: 3306
-       MYSQL_PASSWORD: 123456!@#$%^
+       MYSQL_PASSWORD: Aa-123456
        HOSTNAME: robocup.org
 
 volumes:
