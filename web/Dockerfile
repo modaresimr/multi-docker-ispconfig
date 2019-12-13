@@ -103,7 +103,8 @@ RUN \
 	./debian/rules binary &&\
 	cd /tmp &&\
 	dpkg -i jailkit_2.19-1_*.deb &&\
-	supervisorctl reload
+	ls
+	#supervisorctl reload
 	
 	
 	# Cleanup
