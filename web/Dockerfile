@@ -104,7 +104,7 @@ RUN \
 	cd /root &&\
 	wget -O ispconfig.tar.gz https://git.ispconfig.org/ispconfig/ispconfig3/repository/archive.tar.gz?ref=stable-3.1 &&\
 	tar xfz ispconfig.tar.gz &&\
-	mv ispconfig3* ispconfig3_install &&\
+	mv ispconfig3* ispconfig3_install 
 
 ADD ./start.sh /start.sh
 ADD autoinstall.ini /root/ispconfig3_install/install/
