@@ -41,5 +41,5 @@ services:
        MYSQL_PASSWORD: Aa-123456
        HOSTNAME: robocup.org
 
-volumes:
-    db_data: {}
+#volumes:
+#    db_data: {}
