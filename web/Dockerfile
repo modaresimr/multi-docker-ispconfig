@@ -28,10 +28,6 @@ WORKDIR $HOME
 # Layer cleanup script
 COPY clean-layer.sh	/usr/bin/clean-layer.sh
 COPY fix-permissions.sh	/usr/bin/fix-permissions.sh
-ADD awstats /etc/cron.d/
-ADD autoinstall.ini /root/
-ADD pure-ftpd-common /etc/default/
-ADD supervisord.conf /etc/supervisord/supervisord.conf
 
 
 
@@ -92,6 +88,10 @@ RUN \
 	#FIREWALL
 	apt-get -y install ufw
 	
+ADD awstats /etc/cron.d/
+ADD autoinstall.ini /root/
+ADD pure-ftpd-common /etc/default/
+ADD supervisord.conf /etc/supervisord/supervisord.conf
 
 RUN \
 	# --- 17 Install Jailkit
@@ -103,7 +103,7 @@ RUN \
 	./debian/rules binary &&\
 	cd /tmp &&\
 	dpkg -i jailkit_2.19-1_*.deb &&\
-
+	supervisorctl reload
 	
 	
 	# Cleanup
