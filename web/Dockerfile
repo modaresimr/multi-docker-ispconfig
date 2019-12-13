@@ -81,10 +81,10 @@ RUN \
 	#FIREWALL
 	apt-get -y install ufw
 	
-ADD awstats /etc/cron.d/
+ADD ./awstats /etc/cron.d/awstats
 
-ADD pure-ftpd-common /etc/default/
-ADD supervisord.conf /etc/supervisord/supervisord.conf
+ADD ./pure-ftpd-common /etc/default/pure-ftpd-common
+ADD ./supervisord.conf /etc/supervisord/supervisord.conf
 
 RUN \
 	# --- 17 Install Jailkit
@@ -107,7 +107,7 @@ RUN \
 	mv ispconfig3* ispconfig3_install 
 
 ADD ./start.sh /start.sh
-ADD autoinstall.ini /root/ispconfig3_install/install/
+ADD ./autoinstall.ini /root/ispconfig3_install/install/autoinstall.ini
 RUN \
 	mkdir -p /var/run/sshd /var/log/supervisor /var/run/supervisor &&\
 	chmod 755 /start.sh
