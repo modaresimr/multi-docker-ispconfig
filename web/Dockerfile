@@ -77,7 +77,7 @@ RUN \
 	# --- MYSQL CLIENT
 	apt-get -y install mysql-client &&\
 	# --- NGINX
-	apt-get install nginx &&\
+	apt-get -y install nginx &&\
 	service nginx start &&\
 	apt-get -y install php7.2-fpm &&\
 	apt-get -y install php7.2-mysql &&\
@@ -90,7 +90,7 @@ RUN \
 	apt-get -y install pure-ftpd-common pure-ftpd-mysql quota quotatool&&\
 	#echo 1 > /etc/pure-ftpd/conf/TLS &&\
 	#FIREWALL
-	apt-get install ufw
+	apt-get -y install ufw
 	
 
 RUN \
