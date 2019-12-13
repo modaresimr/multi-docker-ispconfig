@@ -11,9 +11,9 @@ USER root
 ### BASICS ###
 # Technical Environment Variables
 ENV \
-    SHELL="/bin/bash" \
-    HOME="/root"  \
-    USER_GID=0 \
+	SHELL="/bin/bash" \
+	HOME="/root"  \
+	USER_GID=0 \
 	DEBIAN_FRONTEND=noninteractive \
 	SQL_HOST=172.17.1.2:3369 \
 	DNS_HOST=172.17.1.3:53 \
@@ -26,8 +26,8 @@ WORKDIR $HOME
 
 
 # Layer cleanup script
-COPY ../scripts/clean-layer.sh  /usr/bin/clean-layer.sh
-COPY ../scripts/fix-permissions.sh  /usr/bin/fix-permissions.sh
+COPY ../scripts/clean-layer.sh	/usr/bin/clean-layer.sh
+COPY ../scripts/fix-permissions.sh	/usr/bin/fix-permissions.sh
 ADD awstats /etc/cron.d/
 ADD autoinstall.ini /root/
 ADD pure-ftpd-common /etc/default/
@@ -38,19 +38,19 @@ ADD supervisord.conf /etc/supervisord/supervisord.conf
 RUN \
 	
 	# --- 0 Update Your Ubuntu Installation
-	echo "deb http://de.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse">>/etc/apt/sources.list
-	echo "deb http://security.ubuntu.com/ubuntu bionic-security multiverse">>/etc/apt/sources.list
-    apt-get update && \
-    apt-get -y upgrade && \
+	echo "deb http://de.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse">>/etc/apt/sources.list && \
+	echo "deb http://security.ubuntu.com/ubuntu bionic-security multiverse">>/etc/apt/sources.list && \
+	apt-get update && \
+	apt-get -y upgrade && \
 	
 	# Generate and Set locals
 	# https://stackoverflow.com/questions/28405902/how-to-set-the-locale-inside-a-debian-ubuntu-docker-container#38553499
 	apt-get install -y locales && \
-    # install locales-all?
-    sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
-    locale-gen && \
-    dpkg-reconfigure --frontend=noninteractive locales && \
-    update-locale LANG=en_US.UTF-8 && \
+	# install locales-all?
+	sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+	locale-gen && \
+	dpkg-reconfigure --frontend=noninteractive locales && \
+	update-locale LANG=en_US.UTF-8 && \
 	
 	# --- 1 Preliminary
 	apt-get -y install rsyslog rsyslog-relp logrotate supervisor screenfetch &&\
@@ -62,7 +62,7 @@ RUN \
 
 	# --- 3 Install a shell text editor
 	apt-get -y install nano vim-nox &&\
-	echo "dash  dash/sh boolean no" | debconf-set-selections && dpkg-reconfigure dash &&\
+	echo "dash	dash/sh boolean no" | debconf-set-selections && dpkg-reconfigure dash &&\
 	
 	# --- 7 Synchronize the System Clock
 	apt-get -y install ntp ntpdate &&\
@@ -94,7 +94,7 @@ RUN \
 	
 
 RUN \
-    	# --- 17 Install Jailkit
+	# --- 17 Install Jailkit
 	cd /tmp &&\
 	wget http://olivier.sessink.nl/jailkit/jailkit-2.19.tar.gz &&\
 	tar xvfz jailkit-2.19.tar.gz &&\
@@ -106,9 +106,9 @@ RUN \
 
 	
 	
-    # Cleanup
+	# Cleanup
 	#chmod a+rwx /usr/bin/clean-layer.sh && \ 
-    #chmod a+rwx /usr/bin/fix-permissions.sh
+	#chmod a+rwx /usr/bin/fix-permissions.sh
 
 
 
