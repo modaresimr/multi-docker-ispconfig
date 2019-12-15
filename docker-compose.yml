@@ -7,7 +7,9 @@ services:
      #  - db_data:/var/lib/mysql
      restart: always
      environment:
-       MYSQL_ROOT_PASSWORD: Aa-123456
+       MYSQL_ROOT_PASSWORD: Aa123456
+       MYSQL_ROOT_HOST: %
+       
 
     #dns:
     # restart: always
@@ -38,7 +40,7 @@ services:
      environment:
        MYSQL_HOST: db
        MYSQL_PORT: 3306
-       MYSQL_PASSWORD: Aa-123456
+       MYSQL_PASSWORD: Aa123456
        HOSTNAME: robocup.org
 
 #volumes:
