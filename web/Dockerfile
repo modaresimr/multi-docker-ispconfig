@@ -70,6 +70,7 @@ RUN \
 	service nginx start &&\
 	apt-get -y install php7.2-fpm &&\
 	apt-get -y install php7.2-mysql &&\
+	apt-get -y install php7.2-mbstring &&\
 	apt-get -y install fcgiwrap &&\
 	apt-get -y install hhvm &&\
 	apt-get -y install certbot &&\
@@ -108,9 +109,12 @@ RUN \
 
 ADD ./start.sh /start.sh
 ADD ./autoinstall.ini /root/ispconfig3_install/install/autoinstall.ini
+RUN mv /bin/systemctl /bin/systemctloriginal
+ADD ./bin/systemctl /bin/systemctl
+
 RUN \
 	mkdir -p /var/run/sshd /var/log/supervisor /var/run/supervisor &&\
-	chmod 755 /start.sh
+	chmod 755 /start.sh /bin/systemctl
 
 
 # CLEANING

@@ -3,6 +3,7 @@ version: '2'
 services:
    db:
      image: mysql/mysql-server:8.0
+     command: --default-authentication-plugin=mysql_native_password
      #volumes:
      #  - db_data:/var/lib/mysql
      restart: always
@@ -23,7 +24,7 @@ services:
     #volumes:
     #- /docker-vol/bind:/data
     
-   ispconfig:
+   web:
      depends_on:
        - db
      build:
