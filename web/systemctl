@@ -13,6 +13,9 @@ case "$1" in
         start)
                 /etc/init.d/$SERVICE start
         ;;
+		reload)
+                /etc/init.d/$SERVICE restart
+        ;;
         *)
                 command systemctloriginal "$@"
         exit 1

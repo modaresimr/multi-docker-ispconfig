@@ -41,4 +41,7 @@ fi
 
 screenfetch
 
+service supervisor stop
 /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
+
+tail -f /var/log/nginx/* /var/log/php7.2-fpm.log /var/log/auth.log /var/log/cron.log
