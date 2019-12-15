@@ -32,6 +32,11 @@ if [ ! -f /usr/local/ispconfig/interface/lib/config.inc.php ]; then
 	sed -i "s/^hostname=server1.example.com$/hostname=$HOSTNAME/g" /root/ispconfig3_install/install/autoinstall.ini
 	# RUN mysqladmin -u root password pass
 	php -q /root/ispconfig3_install/install/install.php --autoinstall=/root/ispconfig3_install/install/autoinstall.ini
+	
+	mysql -h $MYSQL_HOST -uroot -p${MYSQL_PASSWORD} -e "update mysql.user set Host='%' where user='ispconfig';"&&\
+	mysql -h $MYSQL_HOST -uroot -p${MYSQL_PASSWORD} -e "update mysql.db set Host='%' where db='dbispconfig';"&&\
+	mysql -h $MYSQL_HOST -uroot -p${MYSQL_PASSWORD} -e "FLUSH PRIVILEGES;"&&\
+	
 	mkdir /var/www/html
 	echo "" > /var/www/html/index.html
 	#rm -r /root/ispconfig3_install

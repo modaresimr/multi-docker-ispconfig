@@ -14,16 +14,16 @@ ENV \
 	SHELL="/bin/bash" \
 	HOME="/root"  \
 	USER_GID=0 \
-	DEBIAN_FRONTEND=noninteractive \
-	SQL_HOST=172.17.1.2:3369 \
-	DNS_HOST=172.17.1.3:53 \
-	MAIL_HOST=172.17.1.4:
-	
+	DEBIAN_FRONTEND=noninteractive \	
 	
 
 WORKDIR $HOME
 
-
+RUN \
+	echo $EMAIL_HOST > /etc/hostname &&\
+	echo $EMAIL_HOST > /etc/mailname&&\
+	/etc/init.d/hostname.sh start
+	
 
 RUN \	
 	# --- 0 Update Your Ubuntu Installation
@@ -47,7 +47,7 @@ RUN \
 	touch /var/log/cron.log /var/log/auth.log&&\
 
 	# --- 2 Install the SSH server
-	apt-get -y install ssh openssh-server rsync &&\
+	#apt-get -y install ssh openssh-server rsync &&\
 
 	# --- 3 Install a shell text editor
 	apt-get -y install nano vim-nox &&\
@@ -59,45 +59,26 @@ RUN \
 	# https://www.howtoforge.com/tutorial/perfect-server-ubuntu-18-04-nginx-bind-dovecot-and-ispconfig-3/
 	
 	# --- STEP 4
-	#service apparmor stop &&\
-	#update-rc.d -f apparmor remove &&\
-	#apt-get remove apparmor apparmor-utils &&\
-	
+	#service apparmor stop;\
+	#update-rc.d -f apparmor remove ;\
+	#apt-get remove apparmor apparmor-utils ;\
+	service sendmail stop; update-rc.d -f sendmail remove;\
 	# --- MYSQL CLIENT
 	apt-get -y install mysql-client &&\
-	# --- NGINX
-	apt-get -y install nginx &&\
-	service nginx start &&\
+	# --- MAIL
+	apt-get -y install postfix postfix-mysql postfix-doc getmail4 rkhunter binutils dovecot-imapd dovecot-pop3d dovecot-mysql dovecot-sieve dovecot-lmtpd  sudo &&\
+	echo 'mailman mailman/default_server_language en' | debconf-set-selections &&\
+	apt-get -y install mailman&&\
+
+	# --- PHP
 	apt-get -y install php7.2-fpm php7.2-mysql php7.2-xml php7.2-mbstring &&\
-	apt-get -y install fcgiwrap &&\
-	apt-get -y install hhvm &&\
-	apt-get -y install certbot &&\
-	apt-get -y install vlogger webalizer awstats geoip-database libclass-dbi-mysql-perl &&\
-	apt-get -y install build-essential autoconf automake libtool flex bison debhelper binutils &&\
-	# Install PureFTPd And Quota
-	apt-get -y install pure-ftpd-common pure-ftpd-mysql quota quotatool&&\
-	#echo 1 > /etc/pure-ftpd/conf/TLS &&\
-	#FIREWALL
-	apt-get -y install ufw
 	
-ADD ./awstats /etc/cron.d/awstats
+	apt-get install fail2ban
 
-ADD ./pure-ftpd-common /etc/default/pure-ftpd-common
-ADD ./supervisord.conf /etc/supervisord/supervisord.conf
-
-RUN \
-	# --- 17 Install Jailkit
-	cd /tmp &&\
-	wget http://olivier.sessink.nl/jailkit/jailkit-2.19.tar.gz &&\
-	tar xvfz jailkit-2.19.tar.gz &&\
-	cd jailkit-2.19 &&\
-	echo 5 > debian/compat &&\
-	./debian/rules binary &&\
-	cd /tmp &&\
-	dpkg -i jailkit_2.19-1_*.deb &&\
-	ls
-	#supervisorctl reload
 	
+ADD .dovecot-pop3imap.conf /etc/fail2ban/filter.d/dovecot-pop3imap.conf
+ADD .fail2ban.local /etc/fail2ban/jail.local 
+
 
 RUN \
 	cd /root &&\
@@ -107,11 +88,12 @@ RUN \
 
 ADD ./start.sh /start.sh
 ADD ./autoinstall.ini /root/ispconfig3_install/install/autoinstall.ini
+
 RUN mv /bin/systemctl /bin/systemctloriginal
 ADD ./systemctl /bin/systemctl
 
 RUN \
-	mkdir -p /var/run/sshd /var/log/supervisor /var/run/supervisor /run/php/ &&\
+	mkdir -p  /var/log/supervisor /var/run/supervisor &&\
 	chmod 755 /start.sh /bin/systemctl &&\
 	
 	
@@ -131,6 +113,6 @@ RUN \
 
 EXPOSE 20/tcp 21/tcp 22/tcp 80/tcp 443/tcp 8080/tcp
 
-VOLUME ["/var/www/","/var/log/"]
+VOLUME ["/var/mail/"]
 
 CMD ["/bin/bash", "/start.sh"]
