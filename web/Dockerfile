@@ -129,6 +129,6 @@ RUN \
 
 EXPOSE 20/tcp 21/tcp 22/tcp 80/tcp 443/tcp 8080/tcp
 
-VOLUME ["/var/www/","/etc/nginx/","/var/log/"]
+VOLUME ["/var/www/","/var/log/"]
 
 CMD ["/bin/bash", "/start.sh"]

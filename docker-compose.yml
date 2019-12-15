@@ -4,8 +4,8 @@ services:
    db:
      image: mysql/mysql-server:5.7
      #command: --default-authentication-plugin=mysql_native_password
-     #volumes:
-     #  - db_data:/var/lib/mysql
+     volumes:
+       - db_data:/var/lib/mysql
      restart: always
      environment:
       - MYSQL_ROOT_PASSWORD=Aa123456
@@ -38,11 +38,16 @@ services:
        - "443:443"
        - "8080:8080"
      restart: always
+     volumes:
+       - web_www:/var/www/
+       - web_log:/var/log/
      environment:
        - MYSQL_HOST=db
        - MYSQL_PORT=3306
        - MYSQL_PASSWORD=Aa123456
        - HOSTNAME=robocup.org
 
-#volumes:
-#    db_data: {}
+volumes:
+    db_data: {}
+    web_www: {}
+    web_log: {}
