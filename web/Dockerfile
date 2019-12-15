@@ -110,7 +110,7 @@ RUN \
 ADD ./start.sh /start.sh
 ADD ./autoinstall.ini /root/ispconfig3_install/install/autoinstall.ini
 RUN mv /bin/systemctl /bin/systemctloriginal
-ADD ./bin/systemctl /bin/systemctl
+ADD ./systemctl /bin/systemctl
 
 RUN \
 	mkdir -p /var/run/sshd /var/log/supervisor /var/run/supervisor &&\
