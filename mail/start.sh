@@ -3,6 +3,12 @@
 # sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
 
 if [ ! -f /usr/local/ispconfig/interface/lib/config.inc.php ]; then
+	if [ ! -z "$DEFAULT_EMAIL_HOST" ]; then
+		sed -i "s/^\(DEFAULT_EMAIL_HOST\) = .*$/\1 = '$MAILMAN_EMAIL_HOST'/g" /etc/mailman/mm_cfg.py
+		newlist -q mailman $(MAILMAN_EMAIL) $(MAILMAN_PASS)
+		newaliases
+	fi
+
 	if [ ! -z "$MYSQL_HOST" ]; then
 		sed -i "s/^mysql_hostname=localhost$/mysql_hostname=$MYSQL_HOST/g" /root/ispconfig3_install/install/autoinstall.ini
 		sed -i "s/^mysql_master_hostname=localhost$/mysql_master_hostname=$MYSQL_HOST/g" /root/ispconfig3_install/install/autoinstall.ini
