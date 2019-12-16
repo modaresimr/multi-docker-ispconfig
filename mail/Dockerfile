@@ -1,5 +1,5 @@
 FROM ubuntu:18.04
-
+#https://github.com/tomav/docker-mailserver
 
 MAINTAINER Ali Modaresi <modaresi.mr@gmail.com> version: 1.0
 
@@ -14,15 +14,16 @@ ENV \
 	SHELL="/bin/bash" \
 	HOME="/root"  \
 	USER_GID=0 \
-	DEBIAN_FRONTEND=noninteractive \	
+	DEBIAN_FRONTEND=noninteractive \
+	MAIL_HOST=robocup.org
 	
 
 WORKDIR $HOME
 
 RUN \
 	echo $EMAIL_HOST > /etc/hostname &&\
-	echo $EMAIL_HOST > /etc/mailname&&\
-	/etc/init.d/hostname.sh start
+	echo $EMAIL_HOST > /etc/mailname
+	
 	
 
 RUN \	
@@ -42,7 +43,7 @@ RUN \
 	update-locale LANG=en_US.UTF-8 && \
 	
 	# --- 1 Preliminary
-	apt-get -y install rsyslog rsyslog-relp logrotate supervisor screenfetch &&\
+	apt-get -y install rsyslog rsyslog-relp logrotate supervisor screenfetch systemd&&\
 	# Create the log file to be able to run tail
 	touch /var/log/cron.log /var/log/auth.log&&\
 
@@ -73,11 +74,11 @@ RUN \
 	# --- PHP
 	apt-get -y install php7.2-fpm php7.2-mysql php7.2-xml php7.2-mbstring &&\
 	
-	apt-get install fail2ban
+	apt-get -y install fail2ban
 
 	
-ADD .dovecot-pop3imap.conf /etc/fail2ban/filter.d/dovecot-pop3imap.conf
-ADD .fail2ban.local /etc/fail2ban/jail.local 
+ADD ./dovecot-pop3imap.conf /etc/fail2ban/filter.d/dovecot-pop3imap.conf
+ADD ./fail2ban.local /etc/fail2ban/jail.local 
 
 
 RUN \
@@ -93,7 +94,7 @@ RUN mv /bin/systemctl /bin/systemctloriginal
 ADD ./systemctl /bin/systemctl
 
 RUN \
-	mkdir -p  /var/log/supervisor /var/run/supervisor &&\
+	mkdir -p  /var/log/supervisor /var/run/supervisor /var/run/fail2ban &&\
 	chmod 755 /start.sh /bin/systemctl &&\
 	
 	
@@ -108,8 +109,15 @@ RUN \
 	rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/* &&\
 	# Remove apt lists
 	rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
-
-
+RUN \
+update-rc.d  -f cron remove;\
+update-rc.d  -f nginx remove;\
+update-rc.d  -f php7.2-fpm remove;\
+update-rc.d  -f rsyslog remove;\
+update-rc.d  -f ssf remove;\
+update-rc.d  -f ssh remove;\
+update-rc.d  -f sshd remove;\
+update-rc.d  -f supervisor remove;\
 
 EXPOSE 20/tcp 21/tcp 22/tcp 80/tcp 443/tcp 8080/tcp
 

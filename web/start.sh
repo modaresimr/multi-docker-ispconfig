@@ -41,12 +41,12 @@ if [ ! -f /usr/local/ispconfig/interface/lib/config.inc.php ]; then
 	echo "" > /var/www/html/index.html
 	#rm -r /root/ispconfig3_install
 fi
-
+mkdir /run/php/
 
 
 screenfetch
 
 service supervisor stop
-/usr/bin/supervisord -c /etc/supervisor/supervisord.conf
+/usr/bin/supervisord -c /etc/supervisor/supervisord.conf -n
 
-tail -f /var/log/nginx/* /var/log/php7.2-fpm.log /var/log/auth.log /var/log/cron.log
+#tail -f /var/log/nginx/* /var/log/php7.2-fpm.log /var/log/auth.log /var/log/cron.log

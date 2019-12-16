@@ -21,6 +21,7 @@ if [ ! -f /usr/local/ispconfig/interface/lib/config.inc.php ]; then
 
 	if [ ! -z "$MYSQL_PORT" ]; then
 		sed -i "s/^mysql_port=3306$/mysql_port=$MYSQL_PORT/g" /root/ispconfig3_install/install/autoinstall.ini
+		sed -i "s/^mysql_master_port=3306$/mysql_master_port=$MYSQL_PORT/g" /root/ispconfig3_install/install/autoinstall.ini
 	fi
 
 	if [ ! -z "$LANGUAGE" ]; then
@@ -41,7 +42,7 @@ if [ ! -f /usr/local/ispconfig/interface/lib/config.inc.php ]; then
 	
 	mysql -h $MYSQL_HOST -uroot -p${MYSQL_PASSWORD} -e "update mysql.user set Host='%' where user='ispconfig';"&&\
 	mysql -h $MYSQL_HOST -uroot -p${MYSQL_PASSWORD} -e "update mysql.db set Host='%' where db='dbispconfig';"&&\
-	mysql -h $MYSQL_HOST -uroot -p${MYSQL_PASSWORD} -e "FLUSH PRIVILEGES;"&&\
+	mysql -h $MYSQL_HOST -uroot -p${MYSQL_PASSWORD} -e "FLUSH PRIVILEGES;"
 	
 	#rm -r /root/ispconfig3_install
 fi

@@ -47,6 +47,38 @@ services:
        - MYSQL_PASSWORD=Aa123456
        - HOSTNAME=robocup.org
 
+
+    mail:
+     depends_on:
+       - db
+     build:
+      context: mail
+      dockerfile: Dockerfile
+     ports:
+      - "25:25"
+      - "143:143"
+      - "587:587"
+      - "993:993"
+     restart: always
+     volumes:
+      - maildata:/var/mail
+      - mailstate:/var/mail-state
+      - maillogs:/var/log/mail
+      - ./config/:/tmp/docker-mailserver/
+     environment:
+        - MYSQL_HOST=db
+        - MYSQL_PORT=3306
+        - MYSQL_PASSWORD=Aa123456
+        - ENABLE_SPAMASSASSIN=1
+        - ENABLE_CLAMAV=1
+        - ENABLE_FAIL2BAN=1
+        - ENABLE_POSTGREY=1
+        - ONE_DIR=1
+        - DMS_DEBUG=0
+     cap_add:
+        - NET_ADMIN
+        - SYS_PTRACE
+
 volumes:
     db_data: {}
     web_www: {}
