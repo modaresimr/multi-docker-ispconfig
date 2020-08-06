@@ -4,13 +4,14 @@ services:
    db:
      image: mysql/mysql-server:5.7
      #command: --default-authentication-plugin=mysql_native_password
+     command: --sql_mode=
      volumes:
        - db_data:/var/lib/mysql
+     ports:
+       - "3306:3306"
      restart: always
-     environment:
-      - MYSQL_ROOT_PASSWORD=Aa123456
-      - MYSQL_ROOT_HOST=%
-       
+     env_file:
+        - db.env       
 
     #dns:
     # restart: always
@@ -41,14 +42,13 @@ services:
      volumes:
        - web_www:/var/www/
        - web_log:/var/log/
-     environment:
-       - MYSQL_HOST=db
-       - MYSQL_PORT=3306
-       - MYSQL_PASSWORD=Aa123456
-       - HOSTNAME=robocup.org
+       - web_nginx_config:/etc/nginx
+     env_file:
+        - web.env
 
-
-    mail:
+   mail:
+     hostname: ${HOSTNAME}
+     domainname: ${DOMAINNAME}
      depends_on:
        - db
      build:
@@ -61,20 +61,13 @@ services:
       - "993:993"
      restart: always
      volumes:
-      - maildata:/var/mail
-      - mailstate:/var/mail-state
-      - maillogs:/var/log/mail
+      - mail_data:/var/mail
+      - mail_state:/var/mail-state
+      - mail_logs:/var/log/mail
       - ./config/:/tmp/docker-mailserver/
-     environment:
-        - MYSQL_HOST=db
-        - MYSQL_PORT=3306
-        - MYSQL_PASSWORD=Aa123456
-        - ENABLE_SPAMASSASSIN=1
-        - ENABLE_CLAMAV=1
-        - ENABLE_FAIL2BAN=1
-        - ENABLE_POSTGREY=1
-        - ONE_DIR=1
-        - DMS_DEBUG=0
+     env_file:
+        - mail.env
+        - mail/env-mailserver
      cap_add:
         - NET_ADMIN
         - SYS_PTRACE
@@ -83,3 +76,7 @@ volumes:
     db_data: {}
     web_www: {}
     web_log: {}
+    web_nginx_config: {}
+    mail_data: {}
+    mail_state: {}
+    mail_logs: {}

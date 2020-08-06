@@ -14,11 +14,7 @@ ENV \
 	SHELL="/bin/bash" \
 	HOME="/root"  \
 	USER_GID=0 \
-	DEBIAN_FRONTEND=noninteractive \
-	SQL_HOST=172.17.1.2:3369 \
-	DNS_HOST=172.17.1.3:53 \
-	MAIL_HOST=172.17.1.4:
-	
+	DEBIAN_FRONTEND=noninteractive	
 	
 
 WORKDIR $HOME
@@ -83,7 +79,7 @@ RUN \
 ADD ./awstats /etc/cron.d/awstats
 
 ADD ./pure-ftpd-common /etc/default/pure-ftpd-common
-ADD ./supervisord.conf /etc/supervisord/supervisord.conf
+ADD ./supervisord.conf /etc/supervisor/conf.d/ispconfig.conf
 
 RUN \
 	# --- 17 Install Jailkit
@@ -100,10 +96,10 @@ RUN \
 	
 
 RUN \
-	cd /root &&\
+	cd /root  && \
 	wget -O ispconfig.tar.gz https://git.ispconfig.org/ispconfig/ispconfig3/repository/archive.tar.gz?ref=stable-3.1 &&\
 	tar xfz ispconfig.tar.gz &&\
-	mv ispconfig3* ispconfig3_install 
+	mv ispconfig3* ispconfig3_install
 
 ADD ./start.sh /start.sh
 ADD ./autoinstall.ini /root/ispconfig3_install/install/autoinstall.ini
@@ -112,7 +108,7 @@ ADD ./systemctl /bin/systemctl
 
 RUN \
 	mkdir -p /var/run/sshd /var/log/supervisor /var/run/supervisor /run/php/ &&\
-	chmod 755 /start.sh /bin/systemctl &&\
+	chmod 755 /start.sh /bin/systemctl 
 	
 	
 
