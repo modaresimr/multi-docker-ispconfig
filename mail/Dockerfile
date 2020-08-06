@@ -7,7 +7,7 @@ MAINTAINER Ali Modaresi <modaresi.mr@gmail.com> version: 1.0
 RUN \
 	apt-get update -q --fix-missing && \
 	apt-get -y install --no-install-recommends \
-		wget php-cli
+		wget php-cli php-mysql php-xml php-mbstring 
 
 RUN \
 	cd /root &&\
@@ -22,5 +22,5 @@ ADD ./autoinstall.ini /root/ispconfig3_install/install/autoinstall.ini
 
 EXPOSE 25 587 143 465 993 110 995 4190
 
-#CMD ["/bin/bash", "/start.sh"]
+CMD ["/bin/bash", "/start.sh"]
 
