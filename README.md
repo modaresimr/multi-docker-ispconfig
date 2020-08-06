@@ -2,10 +2,10 @@
 A very simple docker compose file for deploying ispconfig. It has a container for mail, one for database and one for webserver, ssl and ftp server
 
 # Usage
-`
-Please edit db.env, mail.env and web.env
+Please edit db.env, mail.env and web.env and then
+```
 docker-compose up -d
-`
+```
 
 # Features
 ## WEB
