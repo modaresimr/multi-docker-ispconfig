@@ -40,6 +40,7 @@ services:
        - "8080:8080"
      restart: always
      volumes:
+       - web_ispconfig:/usr/local/ispconfig/
        - web_www:/var/www/
        - web_log:/var/log/
        - web_nginx_config:/etc/nginx
@@ -61,6 +62,7 @@ services:
       - "993:993"
      restart: always
      volumes:
+      - mail_ispconfig:/usr/local/ispconfig/
       - mail_data:/var/mail
       - mail_state:/var/mail-state
       - mail_logs:/var/log/mail
@@ -77,6 +79,8 @@ volumes:
     web_www: {}
     web_log: {}
     web_nginx_config: {}
+    web_ispconfig: {}
     mail_data: {}
     mail_state: {}
     mail_logs: {}
+    mail_ispconfig: {}

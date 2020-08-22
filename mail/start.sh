@@ -8,7 +8,7 @@ if [ ! -f /usr/local/ispconfig/interface/lib/config.inc.php ]; then
                 echo waiting for mysql at $MYSQL_HOST
                 sleep 1
         done
-
+	sed -i "s/if(is_dir('\/usr\/local\/ispconfig')) {/if(is_dir('\/usr\/local\/ispconfig1')) {/g"  /root/ispconfig3_install/install/install.php
 	if [ ! -z "$DEFAULT_EMAIL_HOST" ]; then
 		sed -i "s/^\(DEFAULT_EMAIL_HOST\) = .*$/\1 = '$MAILMAN_EMAIL_HOST'/g" /etc/mailman/mm_cfg.py
 		newlist -q mailman $(MAILMAN_EMAIL) $(MAILMAN_PASS)
@@ -38,14 +38,18 @@ if [ ! -f /usr/local/ispconfig/interface/lib/config.inc.php ]; then
 	if [ ! -z "$HOSTNAME" ]; then
 		sed -i "s/^hostname=server1.example.com$/hostname=$HOSTNAME.$DOMAINNAME/g" /root/ispconfig3_install/install/autoinstall.ini
 	fi
-
+	
 	# RUN mysqladmin -u root password pass
 	php -q /root/ispconfig3_install/install/install.php --autoinstall=/root/ispconfig3_install/install/autoinstall.ini
 	
 	#rm -r /root/ispconfig3_install
+        echo "1">/root/ispconfig_service_configured
+elif [[ ! -f /root/ispconfig_service_configured ]]; then
+        php -q /root/ispconfig3_install/install/update.php --autoinstall=/root/ispconfig3_install/install/autoinstall.ini
+        echo "1">/root/ispconfig_service_configured
 fi
 
-
+service cron start
 
 #screenfetch
 

@@ -6,8 +6,9 @@ MAINTAINER Ali Modaresi <modaresi.mr@gmail.com> version: 1.0
 
 RUN \
 	apt-get update -q --fix-missing && \
-	apt-get -y install --no-install-recommends \
-		wget php-cli php-mysql php-xml php-mbstring 
+	DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+		wget php-cli php-mysql php-xml php-mbstring postfix-mysql postfix-doc patch && \
+	update-rc.d cron enable
 
 RUN \
 	cd /root &&\

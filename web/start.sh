@@ -10,7 +10,7 @@ if [ ! -f /usr/local/ispconfig/interface/lib/config.inc.php ]; then
 		echo waiting for mysql at $MYSQL_HOST
     		sleep 1
 	done
-
+	sed -i "s/if(is_dir('\/usr\/local\/ispconfig')) {/if(is_dir('\/usr\/local\/ispconfig1')) {/g"  /root/ispconfig3_install/install/install.php
 	if [ ! -z "$MYSQL_HOST" ]; then
 		sed -i "s/^mysql_hostname=localhost$/mysql_hostname=$MYSQL_HOST/g" /root/ispconfig3_install/install/autoinstall.ini
 		sed -i "s/^mysql_master_hostname=localhost$/mysql_master_hostname=$MYSQL_HOST/g" /root/ispconfig3_install/install/autoinstall.ini
@@ -45,9 +45,14 @@ if [ ! -f /usr/local/ispconfig/interface/lib/config.inc.php ]; then
 		service nginx reload
 	fi
 	mkdir /var/www/html
-	echo "" > /var/www/html/index.html
+	echo "Welcome" > /var/www/html/index.html
+	echo "1">/root/ispconfig_service_configured
 	#rm -r /root/ispconfig3_install
+elif [[ ! -f /root/ispconfig_service_configured ]]; then
+	php -q /root/ispconfig3_install/install/update.php --autoinstall=/root/ispconfig3_install/install/autoinstall.ini
+	echo "1">/root/ispconfig_service_configured
 fi
+
 mkdir /run/php/
 
 
